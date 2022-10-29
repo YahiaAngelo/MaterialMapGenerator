@@ -6,7 +6,7 @@ bl_info = {
     "location": "Shader Editor > node > Generate Material Maps",
     "description": "Extracts Material Maps from Image Textures",
     "warning": "Requires installation of dependencies",
-    "tracker_url": "https://github.com/YahiaAngelo/material-map-generator/issues",
+    "tracker_url": "https://github.com/YahiaAngelo/MaterialMapGenerator/issues",
     "support": "COMMUNITY",
     "category": "Shader Editor"}
 
