@@ -13,6 +13,7 @@ A Blender plugin to easily generate Material Maps from an Image Texture with one
 2. If you're using Windows, open Blender as adminstrator.
 3. Open Blender prefrences -> Add-ons -> Install and choose the downloaded package.
 4. Enable the plugin then click on "Install dependencies" if you have an Nvida GPU or "Install AMD GPU dependencies" if you have an AMD GPU.
+5. Go grab some coffee because the previous step will take some time (Pro tip: Click on window -> Toggle system console to see the progress).
 
 ## Usage:
 
