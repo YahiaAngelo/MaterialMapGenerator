@@ -6,7 +6,7 @@ A Blender plugin to easily generate Material Maps from an Image Texture with one
 ## Requirments:
 * System: Windows/Linux
 * GPU: Nvidia GPU with a [CUDA-capable](https://developer.nvidia.com/cuda-zone) system or an AMD GPU with a [ROCm-capable](https://rocmdocs.amd.com/en/latest/Installation_Guide/Installation_new.html) system (Linux only)
-* Blender version: 2.9.1+
+* Blender version: 2.91.0+
 
 ## Installation:
 1. Download the [lateset release](https://github.com/YahiaAngelo/MaterialMapGenerator/releases/latest).
