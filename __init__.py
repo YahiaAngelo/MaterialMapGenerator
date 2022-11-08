@@ -13,12 +13,11 @@ bl_info = {
 
 import bpy
 from .absolute_path import absolute_path, path_iterator, delete_files_in_path
-from .install_dependencies import install_pip, install_and_import_module
+from .install_dependencies import install_pip, install_and_import_requirements
 from .install_pytorch_dependencies import install_pytorch_modules, install_pytorch_amd_modules
 import os
 import subprocess
 import shutil
-from collections import namedtuple
 
 def main(operator, context):
     space = context.space_data
@@ -43,6 +42,8 @@ def main(operator, context):
     #Copy the image from ImageTexture to plugin input folder
     shutil.copy2(node_active.image.filepath, absolute_path("input"))
 
+    import site
+    site.addsitedir(absolute_path('.python_dependencies'))
     from .generate import GenerateMaterialMap
     generate = GenerateMaterialMap()
     generate.start()
@@ -90,15 +91,6 @@ def menu_func(self, context):
     self.layout.operator(NodeOperator.bl_idname, text=NodeOperator.bl_label)
 
 
-Dependency = namedtuple("Dependency", ["module", "package", "name"])
-
-# Declare all modules that this add-on depends on, that may need to be installed. The package and (global) name can be
-# set to None, if they are equal to the module name. See import_module and ensure_and_import_module for the explanation
-# of the arguments. DO NOT use this to import other parts of your Python add-on, import them as usual with an
-# "import" statement.
-dependencies = (Dependency(module="numpy", package=None, name=None),
-                Dependency(module="opencv-python", package=None, name=None),)
-
 dependencies_installed = False
 
 class InstallDependenciesOT(bpy.types.Operator):
@@ -117,11 +109,8 @@ class InstallDependenciesOT(bpy.types.Operator):
     def execute(self, context):
         try:
             install_pip()
-            for dependency in dependencies:
-                install_and_import_module(module_name=dependency.module,
-                                          package_name=dependency.package,
-                                          global_name=dependency.name)
-            install_pytorch_modules()
+            install_and_import_requirements(absolute_path("requirements.txt"), absolute_path('.python_dependencies'))
+            install_pytorch_modules(absolute_path('.python_dependencies'))
         except (subprocess.CalledProcessError, ImportError) as err:
             self.report({"ERROR"}, str(err))
             return {"CANCELLED"}
@@ -145,11 +134,8 @@ class InstallAmdDependenciesOT(bpy.types.Operator):
     def execute(self, context):
         try:
             install_pip()
-            for dependency in dependencies:
-                install_and_import_module(module_name=dependency.module,
-                                          package_name=dependency.package,
-                                          global_name=dependency.name)
-            install_pytorch_amd_modules()
+            install_and_import_requirements(absolute_path("requirements.txt"), absolute_path('.python_dependencies'))
+            install_pytorch_amd_modules(absolute_path('.python_dependencies'))
         except (subprocess.CalledProcessError, ImportError) as err:
             self.report({"ERROR"}, str(err))
             return {"CANCELLED"}
