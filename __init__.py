@@ -14,7 +14,7 @@ bl_info = {
 import bpy
 from .absolute_path import absolute_path, path_iterator, delete_files_in_path
 from .install_dependencies import install_pip, install_and_import_requirements
-from .install_pytorch_dependencies import install_pytorch_modules, install_pytorch_amd_modules
+from .install_pytorch_dependencies import install_pytorch_modules, install_pytorch_amd_modules, install_pytorch_apple_modules
 import os
 import subprocess
 import shutil
@@ -145,6 +145,26 @@ class InstallAmdDependenciesOT(bpy.types.Operator):
 
         return {"FINISHED"}
 
+class InstallAppleDependenciesOT(bpy.types.Operator):
+    bl_idname = "material_mapper.install_apple_dependencies"
+    bl_label = "Install Apple M1 dependencies"
+    bl_description = ("Please click on this instead if you have an Apple M1 machine")
+    bl_options = {"REGISTER", "INTERNAL"}
+
+    def execute(self, context):
+        try:
+            install_pip()
+            install_and_import_requirements(absolute_path("requirements.txt"), absolute_path('.python_dependencies'))
+            install_pytorch_apple_modules(absolute_path('.python_dependencies'))
+        except (subprocess.CalledProcessError, ImportError) as err:
+            self.report({"ERROR"}, str(err))
+            return {"CANCELLED"}
+
+        global dependencies_installed
+        dependencies_installed = True
+
+        return {"FINISHED"}
+
 
 class Prefrences(bpy.types.AddonPreferences):
     bl_idname = __name__
@@ -153,11 +173,13 @@ class Prefrences(bpy.types.AddonPreferences):
         layout = self.layout
         layout.operator(InstallDependenciesOT.bl_idname, icon="CONSOLE")
         layout.operator(InstallAmdDependenciesOT.bl_idname, icon="CONSOLE")
+        layout.operator(InstallAppleDependenciesOT.bl_idname, icon="CONSOLE")
 
 
 
 preference_classes = (InstallDependenciesOT,
                       InstallAmdDependenciesOT,
+                      InstallAppleDependenciesOT,
                       Prefrences)
 
 
