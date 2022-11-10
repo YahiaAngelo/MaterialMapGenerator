@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Material Map Generator",
     "author": "YahiaAngelo",
-    "version": (1, 0, 1),
+    "version": (1, 0, 2),
     "blender": (2, 91, 0),
     "location": "Shader Editor > node > Generate Material Maps",
     "description": "Extracts Material Maps from Image Textures",
