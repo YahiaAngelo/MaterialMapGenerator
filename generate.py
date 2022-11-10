@@ -51,6 +51,10 @@ class GenerateMaterialMap:
             print("Warning: Couldn't find available CUDA devices, using cpu instead")
 
         self.device = torch.device('cpu' if self.args.cpu or not isCudaAvailable else 'cuda')
+        
+        if torch.backends.mps.is_available():
+            print("Found Apple Metal chip, using MPS")
+            self.device = torch.device('mps')
 
         self.input_folder = os.path.normpath(self.args.input)
         self.output_folder = os.path.normpath(self.args.output)
