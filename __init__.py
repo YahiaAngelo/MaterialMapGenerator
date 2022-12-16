@@ -39,8 +39,11 @@ def main(operator, context):
     if node_active.image.filepath == "":
         operator.report({'ERROR'}, "Please add an image")
         return
+
+    texImage = node_active.image
+    texImagePath = bpy.path.abspath(texImage.filepath, library= texImage.library)
     #Copy the image from ImageTexture to plugin input folder
-    shutil.copy2(node_active.image.filepath, absolute_path("input"))
+    shutil.copy2(texImagePath, absolute_path("input"))
 
     import site
     site.addsitedir(absolute_path('.python_dependencies'))
